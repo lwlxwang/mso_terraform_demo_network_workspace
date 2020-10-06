@@ -6,6 +6,14 @@ terraform {
   }
 }
 
+provider "mso" {
+  # Configuration options
+  username  = var.mso_username
+  password  = var.mso_password
+  url       = var.mso_url
+  insecure  = true
+}
+
 // Deploy the MSO Template configuration
 module "demo_template" {
   source  = "app.terraform.io/cisco-dcn-ecosystem/demo_template/mso"
@@ -37,7 +45,7 @@ module "demo_onprem" {
 # Add the Azure site
 module "demo_azure" {
   source  = "app.terraform.io/cisco-dcn-ecosystem/demo_azure/mso"
-  version = "0.0.3"
+  version = "0.0.4"
 
   mso_username = var.mso_username
   mso_password = var.mso_password
