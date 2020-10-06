@@ -11,3 +11,16 @@ module "demo_template" {
   subnet_gw = "10.101.10.254/24"
   tenant = "WoS"
 }
+
+# Add the On-Premises site
+module "demo_onprem" {
+  source  = "app.terraform.io/cisco-dcn-ecosystem/demo_onprem/mso"
+  version = "0.0.3"
+
+  mso_username = var.mso_username
+  mso_password = var.mso_password
+  mso_url = var.mso_url
+  name_prefix = "TF-"
+  site_name = "On-premises"
+  schema_name = "terraform_hybrid_cloud"
+}
