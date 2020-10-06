@@ -15,7 +15,7 @@ module "demo_template" {
 # Add the On-Premises site
 module "demo_onprem" {
   source  = "app.terraform.io/cisco-dcn-ecosystem/demo_onprem/mso"
-  version = "0.0.5"
+  version = "0.0.6"
 
   mso_username = var.mso_username
   mso_password = var.mso_password
