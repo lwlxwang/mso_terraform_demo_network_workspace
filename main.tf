@@ -1,3 +1,11 @@
+terraform {
+  required_providers {
+    mso = {
+      source = "CiscoDevNet/mso"
+    }
+  }
+}
+
 // Deploy the MSO Template configuration
 module "demo_template" {
   source  = "app.terraform.io/cisco-dcn-ecosystem/demo_template/mso"
