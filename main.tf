@@ -93,3 +93,12 @@ resource "mso_schema_template_external_epg_contract" "extepg_cloud_internet_c2" 
   external_epg_name = mso_schema_template_external_epg.extepg_cloud_internet.external_epg_name
   relationship_type = "provider"
 }
+
+resource "mso_schema_template_deploy" "shared_deploy" {
+  schema_id     = data.mso_schema.hybrid_cloud.id
+  template_name = mso_schema_template_external_epg.extepg_cloud_internet.template_name
+  depends_on    = [
+    mso_schema_template_external_epg_contract.extepg_cloud_internet_c1,
+    mso_schema_template_external_epg_contract.extepg_cloud_internet_c2
+  ]
+}
