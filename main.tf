@@ -45,7 +45,7 @@ module "demo_onprem" {
 # Add the Azure site
 module "demo_azure" {
   source  = "app.terraform.io/cisco-dcn-ecosystem/demo_azure/mso"
-  version = "0.0.4"
+  version = "0.0.5"
 
   mso_username = var.mso_username
   mso_password = var.mso_password
