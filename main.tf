@@ -17,11 +17,8 @@ provider "mso" {
 // Deploy the MSO Template configuration
 module "demo_template" {
   source  = "app.terraform.io/cisco-dcn-ecosystem/demo_template/mso"
-  version = "0.0.3"
+  version = "0.0.4"
 
-  mso_username = var.mso_username
-  mso_password = var.mso_password
-  mso_url = var.mso_url
   name_prefix = var.name_prefix
   schema_name = var.schema_name
   subnet_gw = "10.101.10.254/24"
