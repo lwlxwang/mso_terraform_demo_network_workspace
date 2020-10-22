@@ -27,3 +27,13 @@ output "virtual_network_name" {
   value = module.demo_azure.virtual_network_name
   description = "The Azure virtual network name"
 }
+
+output "aws_subnet_dn" {
+  value = module.demo_aws.subnet_dn
+  description = "The ACI AWS subnet object DN"
+}
+
+output "aws_region" {
+  value = module.demo_aws.region
+  description = "The AWS region"
+}
