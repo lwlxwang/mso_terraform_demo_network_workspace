@@ -46,3 +46,62 @@ module "demo_azure" {
   schema_name = var.schema_name
   tenant = var.tenant
 }
+
+// Add the AWS site
+module "demo_aws" {
+  source  = "app.terraform.io/cisco-dcn-ecosystem/demo_aws/mso"
+  version = "0.0.6"
+
+  name_prefix = "TF-"
+  site_name = "AWS-West"
+  schema_name = var.schema_name
+  tenant = var.tenant
+}
+
+data "mso_schema" "hybrid_cloud" {
+  name = var.schema_name
+  depends_on = [ module.demo_template ]
+}
+
+resource "mso_schema_template_external_epg" "extepg_cloud_internet" {
+  schema_id         = data.mso_schema.hybrid_cloud.id
+  template_name     = "Template1"
+  external_epg_name = "Cloud-Internet"
+  display_name      = "Cloud-Internet"
+  external_epg_type = "cloud"
+  vrf_name          = "${var.name_prefix}Hybrid_Cloud_VRF"
+  vrf_template_name = "Template1"
+  anp_name          = "${var.name_prefix}App"
+  selector_name     = "Internet"
+  selector_ip       = "0.0.0.0/0"
+  site_id           = [ 
+    module.demo_azure.azure_site_id,
+    module.demo_aws.aws_site_id,
+    module.demo_onprem.onprem_site_id
+  ]
+}
+
+resource "mso_schema_template_external_epg_contract" "extepg_cloud_internet_c1" {
+  schema_id         = data.mso_schema.hybrid_cloud.id
+  template_name     = mso_schema_template_external_epg.extepg_cloud_internet.template_name
+  contract_name     = "${var.name_prefix}Internet-to-Web"
+  external_epg_name = mso_schema_template_external_epg.extepg_cloud_internet.external_epg_name
+  relationship_type = "consumer"
+}
+
+resource "mso_schema_template_external_epg_contract" "extepg_cloud_internet_c2" {
+  schema_id         = data.mso_schema.hybrid_cloud.id
+  template_name     = mso_schema_template_external_epg.extepg_cloud_internet.template_name
+  contract_name     = "${var.name_prefix}VMs-to-Internet"
+  external_epg_name = mso_schema_template_external_epg.extepg_cloud_internet.external_epg_name
+  relationship_type = "provider"
+}
+
+resource "mso_schema_template_deploy" "shared_deploy" {
+  schema_id     = data.mso_schema.hybrid_cloud.id
+  template_name = mso_schema_template_external_epg.extepg_cloud_internet.template_name
+  depends_on    = [
+    mso_schema_template_external_epg_contract.extepg_cloud_internet_c1,
+    mso_schema_template_external_epg_contract.extepg_cloud_internet_c2
+  ]
+}
