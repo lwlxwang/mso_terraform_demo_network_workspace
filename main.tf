@@ -35,3 +35,14 @@ module "demo_onprem" {
   schema_name = var.schema_name
   tenant = var.tenant
 }
+
+// Add the Azure site
+module "demo_azure" {
+  source  = "app.terraform.io/cisco-dcn-ecosystem/demo_azure/mso"
+  version = "0.0.9"
+
+  name_prefix = var.name_prefix
+  site_name = "Azure-West"
+  schema_name = var.schema_name
+  tenant = var.tenant
+}
