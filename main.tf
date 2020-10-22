@@ -24,3 +24,14 @@ module "demo_template" {
   subnet_gw = "10.101.10.254/24"
   tenant = var.tenant
 }
+
+// Add the On-Premises site
+module "demo_onprem" {
+  source  = "app.terraform.io/cisco-dcn-ecosystem/demo_onprem/mso"
+  version = "0.0.7"
+
+  name_prefix = var.name_prefix
+  site_name = "On-premises"
+  schema_name = var.schema_name
+  tenant = var.tenant
+}
